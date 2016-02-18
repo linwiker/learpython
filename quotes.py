@@ -17,4 +17,6 @@ for i in range(len(quotes)):
     timelist.append(y)
 quotesdf = pd.DataFrame(quotes,index=timelist,columns = fields)
 quotesdf = quotesdf.drop(['date'],axis = 1)
-print quotesdf
+#print quotesdf
+print quotesdf.head(5)
+print quotesdf.tail(5)
