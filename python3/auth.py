@@ -22,8 +22,17 @@ if username in dict_temp.keys():
                 flags += 1
     else:
          print("由于你输入错误次数超过三次，禁止再重新登录")
+         dict_temp[username]["count"]=flags
 else:
     for i in range(3):
         passwd=getpass.getpass("please input your password:")
     else:
         print("用户名或者密码错误")
+list_temp=[]
+for i in dict_temp.keys():
+    list_temp.append(i+";")
+    list_temp.append(dict_temp[i]["password"]+";")
+    list_temp.append(str(dict_temp[i]["count"])+"\n")
+str_temp="".join(list_temp)
+f1=open("auth.txt","w")
+f1.write(str_temp)
