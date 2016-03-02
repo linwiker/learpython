@@ -36,3 +36,4 @@ for i in dict_temp.keys():
 str_temp="".join(list_temp)
 f1=open("auth.txt","w")
 f1.write(str_temp)
+f1.close()
