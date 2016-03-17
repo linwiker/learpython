@@ -6,6 +6,7 @@ def inject_user(default_user):
             if 'user' not in kwargs.keys():
                 kwargs['user'] =default_user
             return fn(*args,**kwargs)
+            return wrap.__closure__
         return wrap
     return inject
 
@@ -13,4 +14,4 @@ def inject_user(default_user):
 def do_something(*args,**kwargs):
     print(kwargs['user'])
 
-do_something(user='wiker',age=17)
+print(do_something.__closure__)
