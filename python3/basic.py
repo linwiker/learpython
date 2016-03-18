@@ -12,6 +12,7 @@ def auth_arg(func):
         print('before')
         func(arg)
         print('after')
+    return inner
 
 def f1():
     print('f1')
