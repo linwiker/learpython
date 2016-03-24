@@ -22,6 +22,19 @@ def auth(func):
         return func(*arg, **kwarg)
     return inner
 
+def auth_arg(func):
+    def inner(arg):
+        print('before')
+        func(arg)
+        print('after')
+    return inner
+
+def f1():
+    print('f1')
+
+def f2(arg):
+    print("f2",arg)
+=======
 @auth
 def f4(arg):
     server_list = ['c1','c2','c3']
