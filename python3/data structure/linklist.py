@@ -52,22 +52,29 @@ class LinkedList:
                 cur.next = node    #idx的值赋值成node的值
                 if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
                     self.tail = node
-        print(self.head.data)
+        #print(self.head.data)
 
     def remove(self, idx): #添加删除索引位置方法
         cur = self.head
         cur_idx = 0
         if cur is None:  #判断链表是否为空
             raise Exception("list length less than index")
+        elif cur.next is None: #链表只有一个元素的情况
+            if idx != 0:
+                raise Exception("list length less than index")
         else:
-            while cur_idx < idx - 1:
-                cur = cur.next
-                if cur is None:
-                    raise Exception("list length less than index")
-                cur_idx += 1
-            cur.next = cur.next.next  #直接把cur的下一跳指针指向他的下下一跳
-            if cur.next is None:
-                self.tail = cur
+            if idx == 0:
+                self.head = cur.next
+            else:
+                while cur_idx < idx - 1:
+                    cur = cur.next
+                    if cur is None:
+                        raise Exception("list length less than index")
+                    cur_idx += 1
+                cur.next = cur.next.next  #直接把cur的下一跳指针指向他的下下一跳
+                if cur.next is None:
+                    self.tail = cur
+        print(self.tail.data)
 
     def len(self):    #计算长度方法
         cur = self.head
@@ -86,8 +93,8 @@ if  __name__ == '__main__':
     link_list = LinkedList()
     for i in range(10):
         link_list.append(i)
-    link_list.insert(0,100)
-    link_list.remove(3)
+    link_list.insert(3,100)
+    link_list.remove(10)
     print(link_list.len())
     for y in link_list.iter():
         print(y)
