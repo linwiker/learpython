@@ -32,7 +32,7 @@ class LinkedList:
     def insert(self, idx, value):  #定义插入操作
         cur = self.head  #初始化cur和cur的id
         cur_idx = 0
-        if cur is None:
+        if cur is None:  #添加判断是否为空链表
             node = Node(value)
             self.head = node
             self.tail = node
@@ -52,7 +52,7 @@ class LinkedList:
     def remove(self, idx): #添加删除索引位置方法
         cur = self.head
         cur_idx = 0
-        if cur is None:
+        if cur is None:  #判断链表是否为空
             raise Exception("list length less than index")
         else:
             while cur_idx < idx - 1:
@@ -67,7 +67,7 @@ class LinkedList:
     def len(self):    #计算长度方法
         cur = self.head
         cur_idx = 0
-        if cur is None:
+        if cur is None:  #判断链表是否为空
             return 0
         else:
             while True:
@@ -76,8 +76,6 @@ class LinkedList:
                 if cur is None:
                     return cur_idx
                     break
-
-
 
 if  __name__ == '__main__':
     link_list = LinkedList()
