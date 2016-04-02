@@ -44,7 +44,7 @@ class LinkedList:
             self.tail = node
         #print(self.tail.data)
 
-    def remove(self, idx):
+    def remove(self, idx): #添加删除索引位置方法
         cur = self.head
         cur_idx = 0
         while cur_idx < idx - 1:
@@ -52,7 +52,7 @@ class LinkedList:
             if cur is None:
                 raise Exception("list length less than index")
             cur_idx += 1
-        cur.next = cur.next.next
+        cur.next = cur.next.next  #直接把cur的下一跳指针指向他的下下一跳
         if cur.next is None:
             self.tail = cur
 
