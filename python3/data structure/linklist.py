@@ -30,21 +30,23 @@ class LinkedList:
             yield cur.data
 
     def insert(self, idx, value):  #定义插入操作
-        cur = self.head
+        cur = self.head  #初始化cur和cur的id
         cur_idx = 0
-        while cur_idx < idx:
+        while cur_idx < idx-1: #排除idx-1序列之前，以及超过定义超过索引值的抛出错误
             cur = cur.next
             if cur is None:
                 raise Exception("list length less than index")
             cur_idx += 1
-        node = Node(value)
-        node.next = cur.next
-        cur.data = node.data
+        node = Node(value)    #实例化Node
+        node.next = cur.next  #实例化Node的下一跳游标等于当前值cur的下一跳游标的值
+        cur.next = node
+        if node.next is None:
+            self.tail = node
 
 if  __name__ == '__main__':
     link_list = LinkedList()
     for i in range(10):
         link_list.append(i)
-    link_list.insert(9,100)
+    link_list.insert(1,100)
     for y in link_list.iter():
         print(y)
