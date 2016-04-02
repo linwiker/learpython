@@ -40,6 +40,7 @@ class LinkedList:
             if idx == 0:  #判断链表插入头部
                 node = Node(value)
                 self.head = node
+                node.next = cur.next
             else:
                 while cur_idx < idx - 1: #排除idx-1序列之前，以及超过定义超过索引值的抛出错误
                     cur = cur.next
@@ -85,7 +86,7 @@ if  __name__ == '__main__':
     link_list = LinkedList()
     for i in range(10):
         link_list.append(i)
-    link_list.insert(10,100)
+    link_list.insert(0,100)
     link_list.remove(3)
     print(link_list.len())
     for y in link_list.iter():
