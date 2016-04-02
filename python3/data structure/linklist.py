@@ -74,7 +74,7 @@ class LinkedList:
                 cur.next = cur.next.next  #直接把cur的下一跳指针指向他的下下一跳
                 if cur.next is None:
                     self.tail = cur
-        print(self.tail.data)
+        #print(self.tail.data)
 
     def len(self):    #计算长度方法
         cur = self.head
@@ -94,7 +94,7 @@ if  __name__ == '__main__':
     for i in range(10):
         link_list.append(i)
     link_list.insert(3,100)
-    link_list.remove(10)
+    link_list.remove(0)
     print(link_list.len())
     for y in link_list.iter():
         print(y)
