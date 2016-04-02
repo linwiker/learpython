@@ -29,10 +29,10 @@ class LinkedList:
             cur = cur.next
             yield cur.data
 
-#测试是否实现遍历和追加
-if __name__ == "__main__":
-    link_list = LinkedList()
-    for i in range(10):
-        link_list.append(i)
-    for x in link_list.iter():
-        print(x)
+# #测试是否实现遍历和追加
+# if __name__ == "__main__":
+#     link_list = LinkedList()
+#     for i in range(10):
+#         link_list.append(i)
+#     for x in link_list.iter():
+#         print(x)
