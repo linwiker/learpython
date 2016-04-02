@@ -37,17 +37,21 @@ class LinkedList:
             self.head = node
             self.tail = node
         else:
-            while cur_idx < idx - 1: #排除idx-1序列之前，以及超过定义超过索引值的抛出错误
-                cur = cur.next
-                if cur is None:
-                    raise Exception("list length less than index")
-                cur_idx += 1
-            node = Node(value)    #实例化Node
-            node.next = cur.next  #实例化Node的下一跳游标等于当前值cur（这个地方的值是idx-1位置的值）的下一跳游标的值，简单点意思就是把原来idx位置的值向后移动
-            cur.next = node    #idx的值赋值成node的值
-            if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
-                self.tail = node
-        #print(self.tail.data)
+            if idx == 0:  #判断链表插入头部
+                node = Node(value)
+                self.head = node
+            else:
+                while cur_idx < idx - 1: #排除idx-1序列之前，以及超过定义超过索引值的抛出错误
+                    cur = cur.next
+                    if cur is None:
+                        raise Exception("list length less than index")
+                    cur_idx += 1
+                node = Node(value)    #实例化Node
+                node.next = cur.next  #实例化Node的下一跳游标等于当前值cur（这个地方的值是idx-1位置的值）的下一跳游标的值，简单点意思就是把原来idx位置的值向后移动
+                cur.next = node    #idx的值赋值成node的值
+                if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
+                    self.tail = node
+        print(self.head.data)
 
     def remove(self, idx): #添加删除索引位置方法
         cur = self.head
