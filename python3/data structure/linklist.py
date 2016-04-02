@@ -38,9 +38,9 @@ class LinkedList:
                 raise Exception("list length less than index")
             cur_idx += 1
         node = Node(value)    #实例化Node
-        node.next = cur.next  #实例化Node的下一跳游标等于当前值cur的下一跳游标的值
-        cur.next = node
-        if node.next is None:
+        node.next = cur.next  #实例化Node的下一跳游标等于当前值cur（这个地方的值是idx-1位置的值）的下一跳游标的值，简单点意思就是把原来idx位置的值向后移动
+        cur.next = node    #idx的值赋值成node的值
+        if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
             self.tail = node
 
 if  __name__ == '__main__':
