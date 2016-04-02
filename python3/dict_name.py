@@ -5,6 +5,6 @@ dict_temp={}
 f=open("dict_name.txt",'r')
 for i in f.readlines():
     data=i.strip().split("|")
-    dict_temp[data[0]]=[data[1],data[2]]
+    dict_temp[data[0]]=data[1:]
 print(dict_temp)
 f.close()
