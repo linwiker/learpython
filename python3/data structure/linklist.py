@@ -29,3 +29,22 @@ class LinkedList:
             cur = cur.next
             yield cur.data
 
+    def insert(self, idx, value):  #定义插入操作
+        cur = self.head
+        cur_idx = 0
+        while cur_idx < idx:
+            cur = cur.next
+            if cur is None:
+                raise Exception("list length less than index")
+            cur_idx += 1
+        node = Node(value)
+        node.next = cur.next
+        cur.data = node.data
+
+if  __name__ == '__main__':
+    link_list = LinkedList()
+    for i in range(10):
+        link_list.append(i)
+    link_list.insert(9,100)
+    for y in link_list.iter():
+        print(y)
