@@ -44,7 +44,7 @@ class LinkedList:
             self.tail = node
         #print(self.tail.data)
 
-    def remove(self, value):
+    def remove(self, idx):
         cur = self.head
         cur_idx = 0
         while cur_idx < idx - 1:
@@ -61,5 +61,6 @@ if  __name__ == '__main__':
     for i in range(10):
         link_list.append(i)
     link_list.insert(10,100)
+    link_list.remove(3)
     for y in link_list.iter():
         print(y)
