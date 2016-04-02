@@ -29,7 +29,7 @@ class LinkedList:
             cur = cur.next
             yield cur.data
 
-#测试下追加函数和遍历函数
+#测试是否实现遍历和追加
 if __name__ == "__main__":
     link_list = LinkedList()
     for i in range(10):
