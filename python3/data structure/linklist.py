@@ -42,11 +42,12 @@ class LinkedList:
         cur.next = node    #idx的值赋值成node的值
         if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
             self.tail = node
+        #print(self.tail.data)
 
 if  __name__ == '__main__':
     link_list = LinkedList()
     for i in range(10):
         link_list.append(i)
-    link_list.insert(1,100)
+    link_list.insert(10,100)
     for y in link_list.iter():
         print(y)
