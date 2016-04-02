@@ -32,7 +32,7 @@ class LinkedList:
     def insert(self, idx, value):  #定义插入操作
         cur = self.head  #初始化cur和cur的id
         cur_idx = 0
-        while cur_idx < idx-1: #排除idx-1序列之前，以及超过定义超过索引值的抛出错误
+        while cur_idx < idx - 1: #排除idx-1序列之前，以及超过定义超过索引值的抛出错误
             cur = cur.next
             if cur is None:
                 raise Exception("list length less than index")
@@ -43,6 +43,18 @@ class LinkedList:
         if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
             self.tail = node
         #print(self.tail.data)
+
+    def remove(self, value):
+        cur = self.head
+        cur_idx = 0
+        while cur_idx < idx - 1:
+            cur = cur.next
+            if cur is None:
+                raise Exception("list length less than index")
+            cur_idx += 1
+        cur.next = cur.next.next
+        if cur.next is None:
+            self.tail = cur
 
 if  __name__ == '__main__':
     link_list = LinkedList()
