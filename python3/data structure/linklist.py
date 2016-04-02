@@ -56,11 +56,24 @@ class LinkedList:
         if cur.next is None:
             self.tail = cur
 
+    def len(self):    #计算长度方法
+        cur = self.head
+        cur_idx = 0
+        while True:
+            cur = cur.next
+            cur_idx += 1
+            if cur is None:
+                return cur_idx
+                break
+
+
+
 if  __name__ == '__main__':
     link_list = LinkedList()
     for i in range(10):
         link_list.append(i)
     link_list.insert(10,100)
     link_list.remove(3)
+    print(link_list.len())
     for y in link_list.iter():
         print(y)
