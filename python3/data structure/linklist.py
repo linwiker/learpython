@@ -36,11 +36,22 @@ class LinkedList:
             node = Node(value)
             self.head = node
             self.tail = node
-        else:
+        elif cur.next is None:
             if idx == 0:  #判断链表插入头部
+                node = Node(value)   #待解决
+                self.head = node
+                cur.next = node.next
+                node.next = cur
+            else:
+                node =Node(value)
+                node.next = cur.next
+                cur.next = node
+        else:
+            if idx == 0:
                 node = Node(value)
                 self.head = node
-                node.next = cur.next
+                node.next = cur
+                cur.next = node.next.next
             else:
                 while cur_idx < idx - 1: #排除idx-1序列之前，以及超过定义超过索引值的抛出错误
                     cur = cur.next
@@ -94,7 +105,7 @@ if  __name__ == '__main__':
     for i in range(10):
         link_list.append(i)
     link_list.insert(3,100)
-    link_list.remove(0)
+    link_list.remove(5)
     print(link_list.len())
     for y in link_list.iter():
         print(y)
