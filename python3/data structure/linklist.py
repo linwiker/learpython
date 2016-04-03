@@ -32,23 +32,21 @@ class LinkedList:
     def insert(self, idx, value):  #定义插入操作
         cur = self.head  #初始化cur和cur的id
         cur_idx = 0
-        if cur is None:  #添加判断是否为空链表
-            node = Node(value)
+        node = Node(value)
+        if cur is None:  #添加判断是否为空链表=
             self.head = node
             self.tail = node
-        elif cur.next is None:
-            if idx == 0:  #判断链表插入头部
-                node = Node(value)   #待解决
+        elif cur.next is None:  #如果链表只有一个元素
+            if idx == 0:  #判断链表插入头部,头部指针指向node，当前的值移动到node后方
                 self.head = node
                 cur.next = node.next
                 node.next = cur
+                print(self.tail.data)
             else:
-                node =Node(value)
                 node.next = cur.next
                 cur.next = node
-        else:
-            if idx == 0:
-                node = Node(value)
+        else:  #链表超过两个以上元素
+            if idx == 0:  #如果插入头部的话，头部指针指向node，node下一条指针指向cur的值，cur的下一条指针指向node节点的下下一跳
                 self.head = node
                 node.next = cur
                 cur.next = node.next.next
@@ -58,10 +56,9 @@ class LinkedList:
                     if cur is None:
                         raise Exception("list length less than index")
                     cur_idx += 1
-                node = Node(value)    #实例化Node
                 node.next = cur.next  #实例化Node的下一跳游标等于当前值cur（这个地方的值是idx-1位置的值）的下一跳游标的值，简单点意思就是把原来idx位置的值向后移动
                 cur.next = node    #idx的值赋值成node的值
-                if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
+            if node.next is None:  #判断node的值要插入到最后位置，把尾部标识要移动到node上
                     self.tail = node
         #print(self.head.data)
 
@@ -102,10 +99,10 @@ class LinkedList:
 
 if  __name__ == '__main__':
     link_list = LinkedList()
-    for i in range(10):
+    for i in range(1):
         link_list.append(i)
-    link_list.insert(3,100)
-    link_list.remove(5)
-    print(link_list.len())
+    link_list.insert(0,100)
+    # link_list.remove(5)
+    # print(link_list.len())
     for y in link_list.iter():
         print(y)
