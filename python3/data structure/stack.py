@@ -9,13 +9,13 @@ class Stack:   #定义栈，两个方法push和pop
     def __init__(self):
         self.top = None
 
-    def push(self, value):
+    def push(self, value):  #入栈
         node = Node(value)
-        node.next = self.top
+        node.next = self.top  #结点的下一条既是栈顶，因为我们是压入的node，所以现在的栈顶既是node
         self.top = node
 
-    def pop(self):
-        node = self.top
+    def pop(self):  #出栈
+        node = self.top  #定义node为栈顶，我们压出去一个节点就表面栈顶变为了node指针指向的下一条，然后返回node值
         self.top = node.next
         return node.value
 
