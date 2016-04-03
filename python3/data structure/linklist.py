@@ -102,7 +102,7 @@ if  __name__ == '__main__':
     for i in range(1):
         link_list.append(i)
     link_list.insert(0,100)
-    # link_list.remove(5)
-    # print(link_list.len())
+    link_list.remove(5)
+    print(link_list.len())
     for y in link_list.iter():
         print(y)
