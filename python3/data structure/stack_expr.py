@@ -4,11 +4,11 @@
 
 from stack import Stack
 
-func_map = {  #下面实现的加减乘除功能我们可以通过定义此映射函数来简单时间
-    '+':lambda x, y:x + y
-    '-':lambda x, y:x - y
-    '*':lambda x, y: x * y
-    '/':lambda x, y: x / y
+func_map = {  #下面实现的加减乘除功能我们可以通过定义此字典来简单实现
+    '+': lambda x, y:x + y,
+    '-': lambda x, y:x - y,
+    '*': lambda x, y: x * y,
+    '/': lambda x, y: x / y
 }
 
 def cacl(expr):  #定义计算函数
