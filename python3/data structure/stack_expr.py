@@ -25,11 +25,3 @@ def cacl(expr):  #定义计算函数
                         raise Exception('wrong expr')
                     v = stack.pop()  #如果是则把数字压出来
                     v = func_map[s](v,c)  #可以简单通过此方式来实现下面的功能
-                    # if s == '+':  #如果s压出来的是'+'号，则对压出来的数字和c进行相加，下面其他都以此类推
-                    #     v = v + c
-                    # if s == '-':
-                    #     v = v - c
-                    # if s == '*':
-                    #     v = v * c
-                    # if s == '/':
-                    #     v = v / c
