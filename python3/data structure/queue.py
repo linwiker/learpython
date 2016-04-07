@@ -1,6 +1,6 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
-#队列python实现方式
+#简单队列python实现方式
 class Node:
     def __init__(self, value):
         self.value = value
