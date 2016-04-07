@@ -13,10 +13,10 @@ class Map:
 
     def put(self, key, value): #定义put方法
         node = Node(key, value)
-        address = node.key % self.__size  #位置使用
-        self.__slot[address].append(node)
+        address = node.key % self.__size  #计算插入位置使用取模
+        self.__slot[address].append(node)  #插入到上面计算的地址的位置的槽里面
 
-    def get(self, key, default=None):
+    def get(self, key, default=None):  #取数据，定义默认值，如果在槽里面没有找到这个key，则返回默认值
         _key = hash(key)
         address = _key % self.__size
         for i in self.__slot[address]:
