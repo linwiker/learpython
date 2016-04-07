@@ -27,3 +27,10 @@ class Queue:
             node = self.head
             self.head = node.next
             return node.value
+
+if __name__ == '__main__':
+    q = Queue()
+    for i in range(10):
+        q.put(i)
+    for _ in range(10):
+        print(q.pop())
