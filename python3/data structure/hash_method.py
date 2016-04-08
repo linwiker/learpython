@@ -8,7 +8,7 @@ class Node:
 
 class Map:
     def __init__(self, init_size ,hash=hash):  #初始化hash表，hash槽初始化（使用list进行存储），个数取决于我们给的初始化的个数，定义最大的hash个数,可以指定hash函数
-        self.__slot = [[]] * init_size
+        self.__slot = [[] for _ in range(init_size)]
         self.__size = init_size
         self.hash = hash
 
@@ -37,4 +37,4 @@ if __name__ == '__main__':
         map.put(i,i)
     map.remove(10)
     for i in range(20):
-        print(map.get(i))
+        print(map.get(i, 'not set'))
