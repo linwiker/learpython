@@ -21,6 +21,20 @@ class Map:
         _key = self.hash(key)
         address = _key % self.__size
         for i in self.__slot[address]:
-            if i.key == _key
+            if i.key == _key:
                 return i.value
         return default
+
+    def remove(self, key):
+        address = self.hash(key) % self.__size
+        for idx, node in enumerate(self.__slot[address].copy()):
+            if node.key == key:
+                self.__slot[address].pop(idx)
+
+if __name__ == '__main__':
+    map = Map(10)
+    for i in range(20):
+        map.put(i,i)
+    map.remove(10)
+    for i in range(20):
+        print(map.get(i))
