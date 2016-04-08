@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #二叉树遍历方法
 from stack import Stack
+from queue import Queue
 
 class Node:
     def __init__(self, value):  #定义树节点，树的节点有左右两个
@@ -54,10 +55,22 @@ class Tree:
         while stack.top:  #只要是栈里面有数据就执行此循环
             p = stack.pop()  #把栈里面的第一个节点压出来
             fn(p.node.value)  #然后使用fn函数执行根节点
-            if p.right:  #树是从左边开始执行，所以我们先把右边树节点压到栈里面
+            if p.right:  #树是从左边开始执行，所以我们先把右边树节点压到栈里面(因为栈是先进后出)
                 stack.push(p.right)
             if p.left:  #然后把左节点压到栈里面
                 stack.push(p.left)
+
+    def visit_level(self, fn):   #实现层次遍历,要使用队列来实现
+        queue = Queue()  #初始化队列
+        queue.put(self)  #把书放进队列里面
+        while not queue.empty():  #只要队列不为空，就一直循环
+            q = queue.get()  #压出队列的头部的节点
+            fn(q.node.value)  #使用fn执行树的根节点
+            if q.left:  #从左边开始把树的节点压到队列中，队列是先进先出，所以从树左边开始进队列
+                queue.put(q.left)  #把树的左节点压到队列中
+            if q.right:   #如果树有右节点，也把树的右节点压到队列中
+                queue.put(q.right)
+
 
 if __name__ == '__main__':
     d = Tree(Node('D'))  #定义树的所有节点
@@ -81,5 +94,6 @@ if __name__ == '__main__':
     print('\r')
     a.visit_after(partial(print, end=''))  #打印后序遍历
     print('\r')
-    a.visit_first_noiter(partial(print, end=''))  #使用栈的方式打印出先序遍历，尽量少使用递归
-
+    a.visit_first_noiter(partial(print, end=''))  #使用栈的方式打印出先序遍历，尽量少使用递归，结果和使用递归的打印先序遍历结果一样
+    print('\r')
+    a.visit_level(partial(print, end=''))  #打印出层次遍历的而结果，结果是ABCDEFG
