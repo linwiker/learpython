@@ -1,6 +1,8 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
-#平衡二叉树
+#二叉树遍历方法
+from stack import Stack
+
 class Node:
     def __init__(self, value):  #定义树节点，树的节点有左右两个
         self.value = value
@@ -26,26 +28,36 @@ class Tree:
         return self.node.right
 
     def visit_first(self, fn):  #定义先序遍历
-        fn(self.node.value)
+        fn(self.node.value)  #先遍历我们的根节点，然后从树的左节点进行遍历，然后在右节点
         if self.left:
             self.left.visit_first(fn)
         if self.right:
             self.right.visit_first(fn)
 
     def visit_midd(self, fn):  #定义中序遍历
-        if self.left:
+        if self.left:   #先遍历树的左节点，然后遍历树的根节点，然后再遍历树的右节点
             self.left.visit_midd(fn)
         fn(self.node.value)
         if self.right:
             self.right.visit_midd(fn)
 
     def visit_after(self, fn): #定义后序遍历
-        if self.left:
+        if self.left:  #先遍历树的左节点，然后遍历树的右节点，然后再遍历树的根节点
             self.left.visit_after(fn)
         if self.right:
             self.right.visit_after(fn)
         fn(self.node.value)
 
+    def visit_first_noiter(self, fn):  #使用非递归的方式实现先序遍历，要使用栈来实现
+        stack = Stack()  #首先初始化一个栈
+        stack.push(self)  #然后把整个树都压到栈里面
+        while stack.top:  #只要是栈里面有数据就执行此循环
+            p = stack.pop()  #把栈里面的第一个节点压出来
+            fn(p.node.value)  #然后使用fn函数执行根节点
+            if p.right:  #树是从左边开始执行，所以我们先把右边树节点压到栈里面
+                stack.push(p.right)
+            if p.left:  #然后把左节点压到栈里面
+                stack.push(p.left)
 
 if __name__ == '__main__':
     d = Tree(Node('D'))  #定义树的所有节点
@@ -68,3 +80,6 @@ if __name__ == '__main__':
     a.visit_midd(partial(print, end=''))   #打印中序遍历
     print('\r')
     a.visit_after(partial(print, end=''))  #打印后序遍历
+    print('\r')
+    a.visit_first_noiter(partial(print, end=''))  #使用栈的方式打印出先序遍历，尽量少使用递归
+
