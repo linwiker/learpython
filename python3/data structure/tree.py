@@ -49,7 +49,7 @@ class Tree:
             self.right.visit_after(fn)
         fn(self.node.value)
 
-    def visit_first_noiter(self, fn):  #使用非递归的方式实现先序遍历，要使用栈来实现
+    def visit_first_nocur(self, fn):  #使用非递归的方式实现先序遍历，要使用栈来实现
         stack = Stack()  #首先初始化一个栈
         stack.push(self)  #然后把整个树都压到栈里面
         while stack.top:  #只要是栈里面有数据就执行此循环
@@ -94,6 +94,6 @@ if __name__ == '__main__':
     print('\r')
     a.visit_after(partial(print, end=''))  #打印后序遍历
     print('\r')
-    a.visit_first_noiter(partial(print, end=''))  #使用栈的方式打印出先序遍历，尽量少使用递归，结果和使用递归的打印先序遍历结果一样
+    a.visit_first_nocur(partial(print, end=''))  #使用栈的方式打印出先序遍历，尽量少使用递归，结果和使用递归的打印先序遍历结果一样
     print('\r')
     a.visit_level(partial(print, end=''))  #打印出层次遍历的而结果，结果是ABCDEFG
