@@ -49,9 +49,9 @@ class Tree:
             self.right.visit_after(fn)
         fn(self.node.value)
 
-    def visit_first_nocur(self, fn):  #使用非递归的方式实现先序遍历，要使用栈来实现
+    def visit_first_norecursion(self, fn):  #使用非递归的方式实现先序遍历，要使用栈来实现
         stack = Stack()  #首先初始化一个栈
-        stack.push(self)  #然后把整个树都压到栈里面
+        stack.push(self)   #然后把树节点压到栈里面
         while stack.top:  #只要是栈里面有数据就执行此循环
             p = stack.pop()  #把栈里面的第一个节点压出来
             fn(p.node.value)  #然后使用fn函数执行根节点
@@ -62,7 +62,7 @@ class Tree:
 
     def visit_level(self, fn):   #实现层次遍历,要使用队列来实现
         queue = Queue()  #初始化队列
-        queue.put(self)  #把书放进队列里面
+        queue.put(self)  #把树节点放进队列里面
         while not queue.empty():  #只要队列不为空，就一直循环
             q = queue.get()  #压出队列的头部的节点
             fn(q.node.value)  #使用fn执行树的根节点
@@ -94,6 +94,6 @@ if __name__ == '__main__':
     print('\r')
     a.visit_after(partial(print, end=''))  #打印后序遍历
     print('\r')
-    a.visit_first_nocur(partial(print, end=''))  #使用栈的方式打印出先序遍历，尽量少使用递归，结果和使用递归的打印先序遍历结果一样
+    a.visit_first_norecursion(partial(print, end=''))  #使用栈的方式打印出先序遍历，尽量少使用递归，结果和使用递归的打印先序遍历结果一样
     print('\r')
     a.visit_level(partial(print, end=''))  #打印出层次遍历的而结果，结果是ABCDEFG
