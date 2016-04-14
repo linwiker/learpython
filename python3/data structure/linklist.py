@@ -41,7 +41,6 @@ class LinkedList:
                 self.head = node
                 cur.next = node.next
                 node.next = cur
-                print(self.tail.data)
             else:
                 node.next = cur.next
                 cur.next = node
@@ -99,7 +98,7 @@ class LinkedList:
 
 if  __name__ == '__main__':
     link_list = LinkedList()
-    for i in range(1):
+    for i in range(10):
         link_list.append(i)
     link_list.insert(0,100)
     link_list.remove(5)
