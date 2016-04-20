@@ -11,6 +11,7 @@ def Process(request, client_address):
     flag = True
     while flag:
         data = conn.recv(1024).decode()
+        print(bool(data=='exit'))
         if data == 'exit':
             flag = False
         elif data == '0':
