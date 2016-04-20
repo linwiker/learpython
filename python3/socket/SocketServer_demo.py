@@ -1,5 +1,6 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
+#服务端实现方式
 import socketserver
 
 class MyServer(socketserver.BaseRequestHandler):
