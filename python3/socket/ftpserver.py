@@ -6,11 +6,12 @@ import os
 
 class MyServer(socketserver.BaseRequestHandler):
     def handle(self):
-        base_path = 'D:/test'
+        base_path = 'D:\test'
         conn = self.request
         print("connected........")
         while True:
-            pre_data = conn.recv(1024)
+            pre_data = conn.recv(1024).decode()
+            print(pre_data)
             cmd,filename,file_size = pre_data.split('|')
             recv_size = 0
             file_dir = os.path.join(base_path,filename)
@@ -18,7 +19,7 @@ class MyServer(socketserver.BaseRequestHandler):
                 Flag = True
                 while Flag:
                     if int(filename) > recv_size:
-                        data = conn.recv(1024)
+                        data = conn.recv(1024).decode()
                         recv_size += len(data)
                     else:
                         recv_size = 0
