@@ -1,5 +1,12 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
-import twisted
+event_list = []
+def run():
+     for event in event_list:
+         obj = event()
+         obj.execute()
 
-twisted.
+class BaseHandle(object):
+    def execute(self):
+        raise Exception('you must overwrite execute')
+
