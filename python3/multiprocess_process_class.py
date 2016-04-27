@@ -5,7 +5,7 @@ import time
 
 class ClockProcess(multiprocessing.Process):
     def __init__(self, interval):
-        super(ClockProcess, self).__init__(self)
+        super(ClockProcess, self).__init__()
         self.interval = interval
 
     def run(self):
