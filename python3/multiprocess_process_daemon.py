@@ -10,5 +10,7 @@ def worker(interval):
 
 if __name__ == '__main__':
     p = multiprocessing.Process(target=worker, args=(3,))
+    p.daemon = True
     p.start()
+    p.join()
     print("end!")
