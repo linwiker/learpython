@@ -2,24 +2,18 @@
 # -*- coding: utf-8 -*-
 import multiprocessing
 
-def write_proc(q):
-    try:
-        q.put(1, block=False)
-    except:
-        pass
+def writer_proc(q):
+    q.put(1, block = False)
 
 def reader_proc(q):
-    try:
-        print(q.get(block= Flase))
-    except:
-        pass
+    print(q.get(block = False))
 
 if __name__ == '__main__':
     q = multiprocessing.Queue()
-    writer = multiprocessing.Process(target=write_proc, args=(q,))
+    writer = multiprocessing.Process(target=writer_proc, args=(q,))
     writer.start()
     reader = multiprocessing.Process(target=reader_proc, args=(q,))
     reader.start()
 
-    reader.join()
     writer.join()
+    reader.join()
