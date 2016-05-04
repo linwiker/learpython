@@ -7,13 +7,13 @@ def func(msg):
     print("msg:",msg)
     time.sleep(3)
     print("end")
-    return "done" + msg
+    return "done" +" "+ msg
 
 if __name__ == '__main__':
     pool = multiprocessing.Pool(4)
     result = []
     for i in range(3):
-        msg = "hello %d" %(i)
+        msg = "hello  %d" %(i)
         result.append(pool.apply_async(func, (msg,)))
     pool.close()
     pool.join()
