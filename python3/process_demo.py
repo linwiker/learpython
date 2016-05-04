@@ -7,3 +7,4 @@ def f(name):
 for i in range(10):
     p = multiprocessing.Process(target=f, args=('world',))
     p.start()
+    p.join()
