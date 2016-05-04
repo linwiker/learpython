@@ -22,8 +22,8 @@ def proc3(pipe):
 
 if __name__ == '__main__':
     pipe = multiprocessing.Pipe()
-    p1 = multiprocessing.Process(target=proc1, args=(pip[0],))
-    p2 = multiprocessing.Process(target=proc2, args=(pip[1]))
+    p1 = multiprocessing.Process(target=proc1, args=(pipe[0],))
+    p2 = multiprocessing.Process(target=proc2, args=(pipe[1],))
 
     p1.start()
     p2.start()
