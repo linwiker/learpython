@@ -15,7 +15,7 @@ def Lee():
 def Marlon():
         print("\nRun task Marlon-%s" %(os.getpid()))
         start = time.time()
-        time.sleep(random.random()*40))
+        time.sleep(random.random()*40)
         end = time.time()
         print("Task Marlon runs %0.2f seconds." %(end - start))
 
