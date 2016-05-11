@@ -27,6 +27,10 @@ if __name__ == '__main__':
     p3.start()
 
     print("The number of CPU is:" + str(multiprocessing.cpu_count()))
+<<<<<<< HEAD
+    list(multiprocessing.active_childern())
+=======
     for p in multiprocessing.active_children():
         print("child   p.name:" + p.name + "\tp.id: " + str(p.pid))
     print("END!!!!!!!!!!!!!!!!!")
+>>>>>>> afd14265c18ba2b93f98e5708514645360b4f677
