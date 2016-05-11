@@ -22,7 +22,7 @@ for message in messages:
         print('%s:sending %s' %(s.getsockname(),message))
         s.send(message.encode())
     for s in socks:
-        data = s.recv(1024).decode()
+        data = s.recv(1024)
         print('%s: received %s' %(s.getsockname(), data.decode()))
         if not data:
             print('closing socket',s.getsockname())
