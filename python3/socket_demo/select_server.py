@@ -46,7 +46,7 @@ while inputs:
 
     for s in writeable:
         try:
-            next_meg = message_queues[s].get_nowait()
+            next_msg = message_queues[s].get_nowait()
         except queue.Empty:
             print('output queue for', s.getpeername(), 'is empty')
             outputs.remove(s)
