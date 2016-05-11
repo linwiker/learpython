@@ -44,20 +44,20 @@ while inputs:
                 s.close()
                 del message_queues[s]
 
-for s in writeable:
-    try:
-        next_meg = message_queues[s].get_nowait()
-    except queue.Empty:
-        print('output queue for', s.getpeername(), 'is empty')
-        outputs.remove(s)
-    else:
-        print('sending %s to %s' %(next_msg, s.getpeername()))
-        s.send(next_msg.encode())
+    for s in writeable:
+        try:
+            next_meg = message_queues[s].get_nowait()
+        except queue.Empty:
+            print('output queue for', s.getpeername(), 'is empty')
+            outputs.remove(s)
+        else:
+            print('sending %s to %s' %(next_msg, s.getpeername()))
+            s.send(next_msg.encode())
 
-for s in exceptional:
-    print('handling exceptional conditionfor',s.getpeername())
-    inputs.remove(s)
-    if s in outputs:
-        outputs.remove(s)
-    s.close()
+    for s in exceptional:
+        print('handling exceptional conditionfor',s.getpeername())
+        inputs.remove(s)
+        if s in outputs:
+            outputs.remove(s)
+        s.close()
 
