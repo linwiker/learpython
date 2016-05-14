@@ -13,7 +13,7 @@ def callback(ch, method, properties, body):
     #time.sleep(10)
     print('OK')
     ch.basic_ack(delivery_tag=method.delivery_tag)
-
+channel.basic_qos(prefetch_count=1)
 channel.basic_consume(callback,
                         queue='hello',
                         no_ack=False)
