@@ -3,4 +3,5 @@
 from redisHelper import RedisHelper
 
 obj = RedisHelper()
-obj.publish('shidahishdiashdiahsidahsidhasidhi')
+for i in range(1000000):
+    obj.publish('{0} Hello World!'.format(i))

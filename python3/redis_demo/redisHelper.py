@@ -4,7 +4,7 @@ import redis
 
 class RedisHelper:
     def __init__(self):
-        pool = redis.ConnectionPool(host='10.99.56.124',port=6379,max_connections=1024)
+        pool = redis.ConnectionPool(host='127.0.0.1',port=6379,max_connections=1024)
         self.__conn = redis.Redis(connection_pool=pool)
         self.chan_sub = 'fm90'
         self.chan_pub = 'fm90'
