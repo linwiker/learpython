@@ -9,6 +9,12 @@ class RedisHelper:
         self.__conn = redis.Redis(connection_pool=pool)
         self.chan_sub = settings.RedisSubChannel
         self.chan_pub = settings.RedisPubChannel
+    
+    def get(self, key):
+        return self.__conn.get(key)
+
+    def set(self,key,value):
+        self.__conn.set(key, value)
 
     def publish(self, msg):
         self.__conn.publish(self.chan_pub, msg)
