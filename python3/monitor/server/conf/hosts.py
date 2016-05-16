@@ -1,14 +1,15 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import templates
+from .templates import Linux2
+from .templates import LinuxGenericTemplate
 
-web_clusters = templates.LinuxGenericTemplate()
+web_clusters = LinuxGenericTemplate()
 web_clusters.hosts = ['10.99.56.124',
                       '10.99.56.121',
                       '10.99.16.254']
 
-mysql_groups = templates.Linux2()
+mysql_groups = Linux2()
 mysql_groups.hosts = ['10.99.56.124',
                       '10.99.56.121']
 

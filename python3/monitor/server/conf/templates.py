@@ -1,6 +1,6 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
-from services import linux
+from .services import linux
 
 class BaseTemplate():
     def __init__(self):
