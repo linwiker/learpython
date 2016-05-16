@@ -1,7 +1,7 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
 import redis
-import conf import settings
+from conf import settings
 
 class RedisHelper:
     def __init__(self):
