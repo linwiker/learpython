@@ -2,12 +2,17 @@
 # -*- coding: utf-8 -*-
 
 from .redisHelper import RedisHelper
+from .serialize import push_all_configs_into_redis
+from conf import hosts
+
 
 class MonitorServer():
     def __init__(self):
         self.r = RedisHelper()
-        self.r.set('k1','v1')
-        self.r.get('k1')
+        self.save_configs()
 
     def start(self):
         pass
+
+    def save_configs(self):
+        push_all_configs_into_redis(self, hosts.monitored_groups)
