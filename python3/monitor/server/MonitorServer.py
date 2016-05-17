@@ -5,4 +5,5 @@ from conf import settings
 
 
 if __name__ == '__main__':
-    main.MonitorServer()
+    d = main.MonitorServer()
+    d.start()
