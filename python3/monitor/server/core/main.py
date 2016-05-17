@@ -4,6 +4,8 @@
 from .redisHelper import RedisHelper
 from .serialize import push_all_configs_into_redis
 from conf import hosts
+import json
+import time
 
 
 class MonitorServer():
@@ -20,4 +22,8 @@ class MonitorServer():
     def handle(self):
         chan_sub = self.r.subscribe()
         while True:
-            print(chan_sub.parse_response())
+            service_data=chan_sub.parse_response()
+            service_data = json.loads(service_data)[2]
+            service_data['timestap'] = time.time()
+            service_data_key = (ServerData::%s::%s %(service_data['host'],service_data['service']))
+            self.r.set(service_data_key,json.dumps(service_data['data']))
