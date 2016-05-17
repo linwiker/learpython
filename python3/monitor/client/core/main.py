@@ -37,7 +37,7 @@ class MonitorClient():
                         next_run_time = interval - service_time
                         print("server %s next run time in %s " %(service,next_run_time))
                     else:
-                        print("run %s" %service)
+                        #print("run %s" %service)
                         self.host_config[service][2] = time.time()
                         t = threading.Thread(target=self.call_plugin, args=(service, plugin_name))
                         t.start()
