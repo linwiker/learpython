@@ -25,5 +25,5 @@ class MonitorServer():
             service_data=chan_sub.parse_response()
             service_data = json.loads(service_data)[2]
             service_data['timestap'] = time.time()
-            service_data_key = (ServerData::%s::%s %(service_data['host'],service_data['service']))
+            service_data_key = ("ServerData::%s::%s" %(service_data['host'],service_data['service']))
             self.r.set(service_data_key,json.dumps(service_data['data']))
