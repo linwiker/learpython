@@ -12,7 +12,12 @@ class MonitorServer():
         self.save_configs()
 
     def start(self):
-        pass
+        self.handle()
 
     def save_configs(self):
         push_all_configs_into_redis(self, hosts.monitored_groups)
+
+    def handle(self):
+        chan_sub = self.r.subscribe()
+        while True:
+            print(chan_sub.parse_response())
