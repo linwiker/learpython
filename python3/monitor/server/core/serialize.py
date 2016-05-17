@@ -12,5 +12,5 @@ def  push_all_configs_into_redis(main_ins,host_groups):
              for s in group.services: #对服务进行循环，然后把以服务名为key的字典加到host为key的字典内。
                  host_config_dic[host][s.name] = [s.plugin_name, s.interval]
      for k, v in host_config_dic.items(): #配置信息存储到redis里面
-         host_config_key =("HostConfig::%s",k)
+         host_config_key =("HostConfig::%s" %k)
          main_ins.r.set(host_config_key,json.dumps(v))
