@@ -6,6 +6,7 @@ from .serialize import push_all_configs_into_redis
 from conf import hosts
 import json
 import time
+import threading
 
 
 class MonitorServer():
@@ -14,6 +15,7 @@ class MonitorServer():
         self.save_configs()
 
     def start(self):
+        self.data_handle()
         self.handle()
 
     def save_configs(self):
@@ -27,3 +29,37 @@ class MonitorServer():
             service_data['timestap'] = time.time()
             service_data_key = ("ServerData::%s::%s" %(service_data['host'],service_data['service']))
             self.r.set(service_data_key,json.dumps(service_data['data']))
+
+    def data_handle_run(self):
+        data_process(self)
+
+    def data_handle(self):
+        """处理监控数据，独立线程"""
+        t = threading.Thread(target=self.data_handle_run)
+        t.start()
+
+    def alter_handle(self):
+        """处理报警信息，独立线程"""
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
