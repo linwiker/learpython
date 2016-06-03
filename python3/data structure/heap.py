@@ -44,8 +44,6 @@ class Heap:
 
         return ret
 
-                    # idx = right
-
 
 if __name__ == '__main__':
     heap = Heap()
