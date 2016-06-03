@@ -9,8 +9,10 @@ class Heap:
 
     def insert(self, value):
         self.__data.append(value)
+        #计算出索引长度和父节点的索引位置
         idx = len(self.__data) - 1
         parent = math.floor((idx - 1) / 2)
+        #有父节点而且父节点的值小于插入的值，执行下面的值和父节点替换操作
         while parent >= 0 and self.__data[parent] < value:
             self.__data[idx] = self.__data[parent]
             self.__data[parent] = value
@@ -43,6 +45,17 @@ class Heap:
             right = 2 * idx + 2
 
         return ret
+
+    def remove(self, i):
+        if len(self.__data)-1 < i:
+            raise Exception('超出索引长度')
+        ret = self.__data[i]
+        value = self.__data.pop()
+        self.__data[i] = value
+        idx = i
+        left = 2 * idx + 1
+        right = 2 * idx + 2
+        while len(self.__data) > right and
 
 
 if __name__ == '__main__':
