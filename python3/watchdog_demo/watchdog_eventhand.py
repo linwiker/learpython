@@ -6,7 +6,6 @@ from watchdog.events import FileSystemEventHandler
 
 class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        print(event.src_path)
         if event.src_path == "/tmp/watch.log":
             print("log file %s changed!" % event.src_path)
 
