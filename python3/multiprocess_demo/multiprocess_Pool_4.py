@@ -13,11 +13,11 @@ def Lee():
     print("Task Lee, runs %0.2f seconds." %(end - start))
 
 def Marlon():
-        print("\nRun task Marlon-%s" %(os.getpid()))
-        start = time.time()
-        time.sleep(random.random()*40)
-        end = time.time()
-        print("Task Marlon runs %0.2f seconds." %(end - start))
+    print("\nRun task Marlon-%s" %(os.getpid()))
+    start = time.time()
+    time.sleep(random.random()*40)
+    end = time.time()
+    print("Task Marlon runs %0.2f seconds." %(end - start))
 
 def Allen():
     print("\nRun task Allen-%s" %(os.getpid()))
