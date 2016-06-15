@@ -1,7 +1,8 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import redis
+import redisHelper
+redisHelper.
 
 pool = redis.ConnectionPool(host='10.99.56.124',port=6379,max_connections=1024)
 r = redis.Redis(connection_pool=pool)
