@@ -18,7 +18,7 @@ class Watcher(FileSystemEventHandler):
             self.offset = os.path.getsize(self.filename)
 
     def start(self):
-        self.observer.schedule(self, path.dirname(self.filename), recursive=False)
+        self.observer.schedule(self, os.path.dirname(self.filename), recursive=False)
         self.observer.start()
         self.observer.join()
 
@@ -42,7 +42,7 @@ class Watcher(FileSystemEventHandler):
             self.fs.close()
 
     def on_created(self, event):
-        if os.path.abspath(event.src_path) == self.filename and os.path.isfile(self.filename)
+        if os.path.abspath(event.src_path) == self.filename and os.path.isfile(self.filename):
             self.fd = open(self.filename)
             self.offset = os.path.getsize(self.filename)
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     w = Watcher(sys.argv[1], Matcher())
     try:
         w.start()
-    except KeyboardInterrupt
+    except KeyboardInterrupt:
         w.stop()
     finally:
         print(1)
