@@ -39,7 +39,7 @@ class Watcher(FileSystemEventHandler):
 
     def on_deleted(self, event):
         if os.path.abspath(event.src_path) == self.filename:
-            self.fs.close()
+            self.fd.close()
 
     def on_created(self, event):
         if os.path.abspath(event.src_path) == self.filename and os.path.isfile(self.filename):
