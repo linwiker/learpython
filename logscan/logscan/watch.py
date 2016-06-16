@@ -46,10 +46,10 @@ class Watcher(FileSystemEventHandler):
             self.fd = open(self.filename)
             self.offset = os.path.getsize(self.filename)
 
-    def on_moved(self, event): #分两种情况，一种是从本地移走
+    def on_moved(self, event): #分两种情况，一种是从本地移走，另一种是移到本地
         if os.path.abspath(event.src_path) == self.filename: #证明是被移走的，所以直接关掉文件句柄就可以了
             self.fd.close()
-        elif os.path.abspath(event.dest_path) == self.filename and os.path.isfile(self.filename):
+        elif os.path.abspath(event.dest_path) == self.filename and os.path.isfile(self.filename): #
             self.fd = open(self.filename)
             self.offset = os.path.getsize(self.filename)
 
