@@ -43,11 +43,11 @@ class Heap:
             idx = tmp_idx
             left = 2 * idx + 1
             right = 2 * idx + 2
-
         return ret
 
+#根据给出的索引，删除二叉树中相应的值
     def remove(self, i):
-        if len(self.__data)-1 < i:
+        if len(self.__data)-1 < i: #如果给出的索引值大于二叉堆中总长度就报错
             raise Exception('超出索引长度')
         ret = self.__data[i]
         value = self.__data.pop()
@@ -55,15 +55,31 @@ class Heap:
         idx = i
         left = 2 * idx + 1
         right = 2 * idx + 2
-        while len(self.__data) > right and
+        #首先判断总的长度大约左节点索引值，然后把左右节点中比较大的值和二叉堆中最后的值进行比较，如果大于最后的值，则互相交互位置，然后再进行比较
+        while len(self.__data) > left:
+            tmp_idx = left
+            if len(self.__data) > right and self.__data[right] > self.__data[left]:
+                tmp_idx = right
+            if self.__data[tmp_idx] > value:
+                self.__data[idx] = self.__data[tmp_idx]
+                self.__data[tmp_idx] = value
+            #else:
+                #print(ret)
+                #return ret
+            idx = tmp_idx
+            left = 2 * idx + 1
+            right = 2 * idx + 2
+            #print(ret)
+        #return ret
 
 
 if __name__ == '__main__':
     heap = Heap()
-    for _ in range(5):
+    for _ in range(10):
         i = random.randint(0, 100)
         print('i is ', i)
         heap.insert(i)
     heap.view()
-    heap.pop()
+    #heap.pop()
+    heap.remove(1)
     heap.view()
