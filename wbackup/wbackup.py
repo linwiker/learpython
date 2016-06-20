@@ -31,7 +31,7 @@ class Wbackup(FileSystemEventHandler):
             if not os.path.basename(path).startswith('.'):
                 self.sftp.put(path)
         except:
-            raise Exception('{0}同步失败created'.format(path))
+            raise Exception('<{0}>同步失败created'.format(path))
 
     def on_modified(self, event):
         path = os.path.abspath(event.src_path)
@@ -39,21 +39,21 @@ class Wbackup(FileSystemEventHandler):
             if not os.path.basename(path).startswith('.'):
                 self.sftp.put(path)
         except:
-            raise Exception('{0}同步失败modified'.format(path))
+            raise Exception('<{0}>同步失败modified'.format(path))
 
     def on_deleted(self, event):
         path = os.path.abspath(event.src_path)
         try:
             self.sftp.delete(path)
         except:
-            raise Exception("{0}远端删除失败deleted".format(path))
+            raise Exception("<{0}>远端备份删除失败deleted".format(path))
     def on_moved(self, event):
         src_path = os.path.abspath(event.src_path)
         dest_path = os.path.abspath(event.dest_path)
         try:
             self.sftp.move(src_path, dest_path)
         except:
-            raise Exception("{0}远端移动到{1}失败moved".format(src_ppath, dest_path))
+            raise Exception("远端备份<{0}>移动到<{1}>失败moved".format(src_ppath, dest_path))
 
 class Rsync:
 
@@ -79,17 +79,17 @@ class Rsync:
                 print(src_path)
                 self.sftp.put(src_path, os.path.join(self.dest_path, src_path.split('/',1)[1]))
         except:
-            raise Exception("{0}同步失败".format(src_path))
+            raise Exception("<{0}>同步失败".format(src_path))
 
     def delete(self, src_path):
         stdin,stdout,stderr = self.ssh.exec_command("rm -rf {0}".format(os.path.join(self.dest_path, src_path.split('/',1)[1])))
         if not stderr:
-            print("{0} 远端同步失败".format(src_path))
+            print("<{0}>远端删除失败".format(src_path))
 
     def move(self, src_path, dest_path):
         _,_,stderr = self.ssh.exec_command("mv {0} {1}".format(os.path.join(self.dest_path, src_path.split('/',1)[1]), os.path.join(self.dest_path,dest_path.split('/',1)[1])))
         if not stderr:
-            print("{0}远端移动到{1}失败".format(src_path, dest_path))
+            print("move<{0}>到<{1}>失败".format(src_path, dest_path))
 
     def stop(self):
         self.t.close()
