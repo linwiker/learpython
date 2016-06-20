@@ -28,32 +28,32 @@ class Wbackup(FileSystemEventHandler):
     def on_created(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            if not os.path.split(path)[1].startswith('.'):
+            if not os.path.basename(path).startswith('.'):
                 self.sftp.put(path)
         except:
-            raise Exception('{0}同步失败'.format(path))
+            raise Exception('{0}同步失败created'.format(path))
 
     def on_modified(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            if not os.path.split(path)[1].startswith('.'):
+            if not os.path.basename(path).startswith('.'):
                 self.sftp.put(path)
         except:
-            raise Exception('{0}同步失败'.format(path))
+            raise Exception('{0}同步失败modified'.format(path))
 
     def on_deleted(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            self.sftp.delete(os.path.split(path))
+            self.sftp.delete(path)
         except:
-            raise Exception("{0}远端删除失败".format(path))
+            raise Exception("{0}远端删除失败deleted".format(path))
     def on_moved(self, event):
         src_path = os.path.abspath(event.src_path)
         dest_path = os.path.abspath(event.dest_path)
         try:
             self.sftp.move(src_path, dest_path)
         except:
-            raise Exception("{0}远端移动到{1}失败".format(os.path.split(event.src_path)[1], os.path.split(event.dest_path)[1]))
+            raise Exception("{0}远端移动到{1}失败moved".format(src_ppath, dest_path))
 
 class Rsync:
 
@@ -65,25 +65,29 @@ class Rsync:
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.ssh.connect(ip,22, username, password)
         self.dest_path = dest_path
-
+    
+    #本地发现有修改或者创建的话，直接sftp传到远端，传之前做判断是否由此目录，如果没有的话创建目录
     def put(self, src_path):
-        path = os.path.split(src_path)
-        if not os.path.exists(os.path.join(self.dest_path, path[0])):
-            _,_,stderr = self.ssh.exec_command("mkdir {0}".format(path[0]))
-            if not stderr:
-                print("{0} 创建失败")
+        path = os.path.join(self.dest_path, os.path.dirname(src_path).split('/',1)[1])
+        stdin,stdout,stderr = self.ssh.exec_command("ls {0}".format(path))
+        if stderr.read():
+            _,_,stderr = self.ssh.exec_command("mkdir -p {0}".format(path))
+            if stderr.read():
+                print("备份端<{0}>创建失败".format(os.path.dirname(path)))
         try:
-            self.sftp.put(src_path, os.path.join(self.dest_path,path))
+            if not os.path.isdir(src_path):
+                print(src_path)
+                self.sftp.put(src_path, os.path.join(self.dest_path, src_path.split('/',1)[1]))
         except:
-            raise Exception("{0}同步失败".format(path))
+            raise Exception("{0}同步失败".format(src_path))
 
     def delete(self, src_path):
-        stdin,stdout,stderr = self.ssh.exec_command("rm -rf {0}".format(os.path.join(self.dest_path,src_path)))
+        stdin,stdout,stderr = self.ssh.exec_command("rm -rf {0}".format(os.path.join(self.dest_path, src_path.split('/',1)[1])))
         if not stderr:
             print("{0} 远端同步失败".format(src_path))
 
     def move(self, src_path, dest_path):
-        _,_,stderr = self.ssh.exec_command("mv {0} {1}".format(os.path.join(self.dest_path,src_path), os.path.join(self.dest_path,dest_path)))
+        _,_,stderr = self.ssh.exec_command("mv {0} {1}".format(os.path.join(self.dest_path, src_path.split('/',1)[1]), os.path.join(self.dest_path,dest_path.split('/',1)[1])))
         if not stderr:
             print("{0}远端移动到{1}失败".format(src_path, dest_path))
 
