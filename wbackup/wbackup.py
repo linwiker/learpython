@@ -4,7 +4,9 @@
 
 import os
 import sys
+import json
 import paramiko
+import multiprocessing
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -96,14 +98,26 @@ class Rsync:
         self.ssh.close()
 
 if __name__ == '__main__':
-    path = sys.argv[1] if len(sys.argv) > 1 else '.'
-    rsync = Rsync('10.99.56.111', 'root', 'redhat','/tmp/')
-    w = Wbackup(path,rsync)
-    try:
-        w.start()
-    except KeyboardInterrupt:
-        w.stop()
-        rsync.stop()
+    f = open('wbackup.json', 'r')
+    conf = json.load(f)
+    for i in conf:
+        rsync = Rsync(i['ip'], i['username'], i['password'], i['dest_path'])
+        w = Wbackup(i['path'], rsync)
+        m = multiprocessing.Process(target=w.start)
+        try:
+            m.start()
+            m.join()
+        except KeyboardInterrupt:
+            w.stop()
+            rsync.stop()
+        # path = sys.argv[1] if len(sys.argv) > 1 else '.'
+        # rsync = Rsync('10.99.56.111', 'root', 'redhat','/tmp/')
+        # w = Wbackup(path,rsync)
+        # try:
+        #     w.start()
+        # except KeyboardInterrupt:
+        #     w.stop()
+        #     rsync.stop()
 
 
 
