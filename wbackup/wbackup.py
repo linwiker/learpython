@@ -44,7 +44,7 @@ class Wbackup(FileSystemEventHandler):
     def on_deleted(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            self.sftp.delete(os.path.split(path)
+            self.sftp.delete(os.path.split(path))
         except:
             raise Exception("{0}远端删除失败".format(path))
     def on_moved(self, event):
