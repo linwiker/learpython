@@ -26,27 +26,32 @@ class Wbackup(FileSystemEventHandler):
         self.observer.stop()
 
     def on_created(self, event):
+        path = os.path.abspath(event.src_path)
         try:
-            if not os.path.split(event.src_path)[1].startswith('.'):
-                self.sftp.put(os.path.split(event.src_path)[1])
+            if not os.path.split(path)[1].startswith('.'):
+                self.sftp.put(path)
         except:
-            raise Exception('{0}同步失败'.format(os.path.split(event.src_path)[1]))
+            raise Exception('{0}同步失败'.format(path))
 
     def on_modified(self, event):
+        path = os.path.abspath(event.src_path)
         try:
-            if not os.path.split(event.src_path)[1].startswith('.'):
-                self.sftp.put(os.path.split(event.src_path)[1])
+            if not os.path.split(path)[1].startswith('.'):
+                self.sftp.put(path)
         except:
-            raise Exception('{0}同步失败'.format(os.path.split(event.src_path)[1]))
+            raise Exception('{0}同步失败'.format(path))
 
     def on_deleted(self, event):
+        path = os.path.abspath(event.src_path)
         try:
-            self.sftp.delete(os.path.split(event.src_path)[1])
+            self.sftp.delete(os.path.split(path)
         except:
-            raise Exception("{0}远端删除失败".format(os.path.split(event.src_path)[1]))
+            raise Exception("{0}远端删除失败".format(path))
     def on_moved(self, event):
+        src_path = os.path.abspath(event.src_path)
+        dest_path = os.path.abspath(event.dest_path)
         try:
-            self.sftp.move(os.path.split(event.src_path)[1], os.path.split(event.dest_path)[1])
+            self.sftp.move(src_path, dest_path)
         except:
             raise Exception("{0}远端移动到{1}失败".format(os.path.split(event.src_path)[1], os.path.split(event.dest_path)[1]))
 
@@ -62,14 +67,15 @@ class Rsync:
         self.dest_path = dest_path
 
     def put(self, src_path):
-        if not os.path.exists(self.dest_path):
-            _,_,stderr = self.ssh.exec_command("mkdir {0}".format(self.dest_path))
+        path = os.path.split(src_path)
+        if not os.path.exists(os.path.join(self.dest_path, path[0])):
+            _,_,stderr = self.ssh.exec_command("mkdir {0}".format(path[0]))
             if not stderr:
                 print("{0} 创建失败")
         try:
-            self.sftp.put(src_path, os.path.join(self.dest_path,src_path))
+            self.sftp.put(src_path, os.path.join(self.dest_path,path))
         except:
-            raise Exception("{0}同步失败".format(src_path))
+            raise Exception("{0}同步失败".format(path))
 
     def delete(self, src_path):
         stdin,stdout,stderr = self.ssh.exec_command("rm -rf {0}".format(os.path.join(self.dest_path,src_path)))
