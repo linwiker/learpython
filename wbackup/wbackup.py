@@ -26,28 +26,29 @@ class Wbackup(FileSystemEventHandler):
         self.observer.stop()
 
     def on_created(self, event):
-        print(event.src_path)
         try:
-            self.sftp.put(event.src_path)
+            if not os.path.split(event.src_path)[1].startswith('.'):
+                self.sftp.put(os.path.split(event.src_path)[1])
         except:
-            raise Exception('{0}同步失败'.format(event.src_path))
+            raise Exception('{0}同步失败'.format(os.path.split(event.src_path)[1]))
 
     def on_modified(self, event):
         try:
-            self.sftp.put(event.src_path)
+            if not os.path.split(event.src_path)[1].startswith('.'):
+                self.sftp.put(os.path.split(event.src_path)[1])
         except:
-            raise Exception('{0}同步失败'.format(event.src_path))
+            raise Exception('{0}同步失败'.format(os.path.split(event.src_path)[1]))
 
     def on_deleted(self, event):
         try:
-            self.sftp.delete(event.src_path)
+            self.sftp.delete(os.path.split(event.src_path)[1])
         except:
-            raise Exception("{0}远端删除失败".format(event.src_path))
+            raise Exception("{0}远端删除失败".format(os.path.split(event.src_path)[1]))
     def on_moved(self, event):
         try:
-            self.sftp.move(event.src_path, event.dest_path)
+            self.sftp.move(os.path.split(event.src_path)[1], os.path.split(event.dest_path)[1])
         except:
-            raise Exception("{0}远端移动到{1}失败".format(event.src_path, event.dest_path))
+            raise Exception("{0}远端移动到{1}失败".format(os.path.split(event.src_path)[1], os.path.split(event.dest_path)[1]))
 
 class Rsync:
 
@@ -63,22 +64,21 @@ class Rsync:
     def put(self, src_path):
         if not os.path.exists(self.dest_path):
             _,_,stderr = self.ssh.exec_command("mkdir {0}".format(self.dest_path))
-            if stderr:
+            if not stderr:
                 print("{0} 创建失败")
-                print(stderr.read())
         try:
             self.sftp.put(src_path, os.path.join(self.dest_path,src_path))
         except:
             raise Exception("{0}同步失败".format(src_path))
 
     def delete(self, src_path):
-        stdin,stdout,stderr = self.ssh.exec_command("rm -rf {0}".format(src_path))
-        if stderr:
+        stdin,stdout,stderr = self.ssh.exec_command("rm -rf {0}".format(os.path.join(self.dest_path,src_path)))
+        if not stderr:
             print("{0} 远端同步失败".format(src_path))
 
     def move(self, src_path, dest_path):
-        _,_,stderr = self.ssh.exec_command("mv {0} {1}".format(src_path, dest_path))
-        if stderr:
+        _,_,stderr = self.ssh.exec_command("mv {0} {1}".format(os.path.join(self.dest_path,src_path), os.path.join(self.dest_path,dest_path)))
+        if not stderr:
             print("{0}远端移动到{1}失败".format(src_path, dest_path))
 
     def stop(self):
@@ -87,7 +87,7 @@ class Rsync:
 
 if __name__ == '__main__':
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
-    rsync = Rsync('127.0.0.1', 'wiker', 'zhouwenjia@30','/tmp/')
+    rsync = Rsync('10.99.56.111', 'root', 'redhat','/tmp/')
     w = Wbackup(path,rsync)
     try:
         w.start()
