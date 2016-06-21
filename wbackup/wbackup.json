@@ -1,2 +1,2 @@
-[{"username": "root", "ip": "10.99.56.111", "dest_path": "/tmp", "password": "redhat", "path": "/usr/local"}, 
-{"username": "root", "ip": "10.99.56.112", "dest_path": "/tmp", "password": "redhat", "path": "/home/wiker"}]
+{"username": "root", "ip": "10.99.56.111", "dest_path": "/tmp", "password": "redhat", "path": "."} 
+

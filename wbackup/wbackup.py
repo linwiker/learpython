@@ -18,10 +18,11 @@ class Wbackup(FileSystemEventHandler):
         self.sftp = sftp
 
 
-    def start(self):
+    def start(self, arg):
         self.observer.schedule(self, path=self.filename, recursive=False)
         self.observer.start()
         self.observer.join()
+        print(arg)
 
 
     def stop(self):
@@ -100,18 +101,8 @@ class Rsync:
 if __name__ == '__main__':
     f = open('wbackup.json', 'r')
     conf = json.load(f)
-    for i in conf:
-        rsync = Rsync(i['ip'], i['username'], i['password'], i['dest_path'])
-        w = Wbackup(i['path'], rsync)
-        m = multiprocessing.Process(target=w.start)
-        try:
-            m.start()
-            m.join()
-        except KeyboardInterrupt:
-            w.stop()
-            rsync.stop()
-        # path = sys.argv[1] if len(sys.argv) > 1 else '.'
-        # rsync = Rsync('10.99.56.111', 'root', 'redhat','/tmp/')
+        rsync = Rsync(conf['ip'], conf['username'], conf['password'], conf['dest_path'])
+        w = Wbackup(conf['path'], rsync)
         # w = Wbackup(path,rsync)
         # try:
         #     w.start()
