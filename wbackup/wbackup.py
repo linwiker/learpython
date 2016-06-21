@@ -77,7 +77,6 @@ class Rsync:
                 print("备份端<{0}>创建失败".format(os.path.dirname(path)))
         try:
             if not os.path.isdir(src_path):
-                print(src_path)
                 self.sftp.put(src_path, os.path.join(self.dest_path, src_path.split('/',1)[1]))
         except:
             raise Exception("<{0}>同步失败".format(src_path))
