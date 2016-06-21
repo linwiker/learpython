@@ -17,11 +17,10 @@ class Wbackup(FileSystemEventHandler):
         self.sftp = sftp
 
 
-    def start(self, arg):
+    def start(self):
         self.observer.schedule(self, path=self.filename, recursive=False)
         self.observer.start()
         self.observer.join()
-        print(arg)
 
 
     def stop(self):
