@@ -6,7 +6,6 @@ import os
 import sys
 import json
 import paramiko
-import multiprocessing
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
