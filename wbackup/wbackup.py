@@ -100,13 +100,13 @@ class Rsync:
 if __name__ == '__main__':
     f = open('wbackup.json', 'r')
     conf = json.load(f)
-        rsync = Rsync(conf['ip'], conf['username'], conf['password'], conf['dest_path'])
-        w = Wbackup(conf['path'], rsync)
-        try:
-            w.start()
-        except KeyboardInterrupt:
-            w.stop()
-            rsync.stop()
+    rsync = Rsync(conf['ip'], conf['username'], conf['password'], conf['dest_path'])
+    w = Wbackup(conf['path'], rsync)
+    try:
+        w.start()
+    except KeyboardInterrupt:
+        w.stop()
+        rsync.stop()
 
 
 
