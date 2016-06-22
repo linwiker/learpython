@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import threading
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -59,10 +60,14 @@ if __name__ == '__main__':
         def match(self, line):
             return True
     w = Watcher(sys.argv[1], Matcher())
+    w2 = Watcher(sys.argv[2], Matcher())
     try:
-        w.start()
+        t1 = threading.Thread(target=w.start)
+        t1.start()
+        t2  = threading.Thread(target=w2.start)
+        t2.start()
     except KeyboardInterrupt:
-        w.stop()
-    finally:
-        print(1)
+        t1._stop()
+        t2._stop()
+
 
