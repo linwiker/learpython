@@ -29,7 +29,7 @@ class Wbackup(FileSystemEventHandler):
     def on_created(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            if not os.path.basename(path).startswith('.'):
+            if not os.path.basename(path).startswith('.') or os.path.basename(path) == '4913':
                 self.sftp.put(path)
         except:
             raise Exception('<{0}>同步失败created'.format(path))
@@ -37,7 +37,7 @@ class Wbackup(FileSystemEventHandler):
     def on_modified(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            if not os.path.basename(path).startswith('.'):
+            if not os.path.basename(path).startswith('.') or os.path.basename(path) == '4913':
                 self.sftp.put(path)
         except:
             raise Exception('<{0}>同步失败modified'.format(path))
