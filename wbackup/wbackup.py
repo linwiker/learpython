@@ -3,7 +3,6 @@
 # 实现实时远程备份
 
 import os
-import sys
 import json
 import paramiko
 from watchdog.events import FileSystemEventHandler
@@ -17,11 +16,10 @@ class Wbackup(FileSystemEventHandler):
         self.sftp = sftp
 
 
-    def start(self, arg):
+    def start(self):
         self.observer.schedule(self, path=self.filename, recursive=False)
         self.observer.start()
         self.observer.join()
-        print(arg)
 
 
     def stop(self):
@@ -30,7 +28,7 @@ class Wbackup(FileSystemEventHandler):
     def on_created(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            if not os.path.basename(path).startswith('.'):
+            if not os.path.basename(path).startswith('.') or os.path.basename(path) == '4913':
                 self.sftp.put(path)
         except:
             raise Exception('<{0}>同步失败created'.format(path))
@@ -38,7 +36,7 @@ class Wbackup(FileSystemEventHandler):
     def on_modified(self, event):
         path = os.path.abspath(event.src_path)
         try:
-            if not os.path.basename(path).startswith('.'):
+            if not os.path.basename(path).startswith('.') or os.path.basename(path) == '4913':
                 self.sftp.put(path)
         except:
             raise Exception('<{0}>同步失败modified'.format(path))
@@ -78,7 +76,6 @@ class Rsync:
                 print("备份端<{0}>创建失败".format(os.path.dirname(path)))
         try:
             if not os.path.isdir(src_path):
-                print(src_path)
                 self.sftp.put(src_path, os.path.join(self.dest_path, src_path.split('/',1)[1]))
         except:
             raise Exception("<{0}>同步失败".format(src_path))
