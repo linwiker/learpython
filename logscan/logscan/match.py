@@ -73,7 +73,7 @@ def tokenize(origin):
     return tokens
 
 
-#子语法解析
+#子函数实现语法解析
 def make_sub_ast(stack, t):
     current = t
     while stack and stack[-1].root.type != Token.LEFT_BRACKETS:  #语法树不为空而且栈顶现在不是左括号
@@ -95,9 +95,9 @@ def make_ast(tokens):
     stack = []
     for t in tokens:
         tree = ASTree(t)
-        if tree.root.type == Token.SYMBOL or tree.root.type == Token.LEFT_BRACKETS: #如果ast节点类型是符号或者是左括号，则压倒栈里面
+        if tree.root.type == Token.SYMBOL or tree.root.type == Token.LEFT_BRACKETS: #如果ast节点类型是符号或者是左括号，则压到栈里面
             stack.append(tree)
-        elif tree.root.type == Token.EXPRESSION: #如果节点是表达式则调用子语法解析来处理
+        elif tree.root.type == Token.EXPRESSION: #如果节点是表达式则调用子函数来处理
             make_sub_ast(stack, tree)
         else:
             sub_tree = stack.pop()
@@ -111,7 +111,7 @@ def make_ast(tokens):
     return stack.pop()
 
 
-#全序遍历(计算)
+#全序遍历(使用递归进行运算)
 def cacl(ast, line):
     #只有两种情况，表达式和符号
     if ast.root.type != Token.EXPRESSION:
