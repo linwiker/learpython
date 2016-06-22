@@ -3,7 +3,6 @@
 # 实现实时远程备份
 
 import os
-import sys
 import json
 import paramiko
 from watchdog.events import FileSystemEventHandler
