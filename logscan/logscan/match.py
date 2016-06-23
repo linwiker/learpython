@@ -127,7 +127,8 @@ def cacl(ast, line):
 
 class Matcher:
 
-    def __init__(self, origin):
+    def __init__(self, name, origin):
+        self.name = name
         self.origin = origin
         self.ast = make_ast(tokenize(origin))
 
