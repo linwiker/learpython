@@ -2,18 +2,19 @@
 # -*- coding: utf-8 -*-
 import threading
 from os import path
-from .watch import Watcher
-from .match import Matcher
+from .count import Counter
 
 class Schedule:
 
-    def __init__(self):
+    def __init__(self, counter_path):
         self.watchers = {}
         self.threads = {}
+        self.counter = Counter(counter_path)
 
     def add_watcher(self, watcher):
         #判断watcher线程是否启动，如果没启动的话，启动个watcher线程
         if watcher.filename not in self.watchers.keys():
+            watcher.counter = self.counter
             t = threading.Thread(target=watcher.start, name="Watcher-{0}".format(watcher.filename))
             t.setDaemon(True)
             t.start()
@@ -33,3 +34,9 @@ class Schedule:
         while self.watchers.values():
             for t in list(self.threads.values()):
                 t.join()
+
+    def stop(self):
+        for w in self.watchers.values():
+            w.stop()
+        self.counter.stop()
+
