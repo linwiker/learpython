@@ -11,6 +11,7 @@ class Watcher(FileSystemEventHandler):
     def __init__(self, filename, matcher):
         self.filename = os.path.abspath(filename)
         self.matcher = matcher
+        self.counter = None
         self.observer = Observer()
         self.fd = None
         self.offset = 0
@@ -32,11 +33,11 @@ class Watcher(FileSystemEventHandler):
     def on_modified(self, event):
         if os.path.abspath(event.src_path) == self.filename:
             self.fd.seek(self.offset, 0)
-            match = getattr(self.matcher, 'match', lambda x: False)  #利用反射对传入的matcher做判断是否有match方法，如果没有的话，永远返回False
             for line in self.fd:
                 line = line.rstrip('\n')
-                if match(line):
-                    print("matched {0}".format(line))
+                if self.matcher.match(line):
+                    if self.counter is not None:
+                        self.counter.inc(self.matcher.name)
             self.offset = self.fd.tell()
 
     def on_deleted(self, event):
