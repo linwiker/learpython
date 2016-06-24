@@ -4,11 +4,12 @@ import time
 import threading
 
 class Message:
-    def __init__(self, user, name, path, count):
+    def __init__(self, user, name, path, count, type = 'mail'):
         self.user = user
         self.name = name
         self.path = path
         self.count = count
+        self.type = type  #如果只选择一种方式发送信息的话，可以加上type类型进行判断
 
 class Notification:
     def __init__(self):
