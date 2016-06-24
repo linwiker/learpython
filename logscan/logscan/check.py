@@ -1,28 +1,45 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
 import time
+import logging
 import threading
+from queue import Queue, Full
+
 
 class Message:
-    def __init__(self, user, name, path, count, type = 'mail'):
+    def __init__(self, user, name, path, count, type = None):
         self.user = user
         self.name = name
         self.path = path
         self.count = count
-        self.type = type  #如果只选择一种方式发送信息的话，可以加上type类型进行判断
+        if type == None:
+            self.type = ['mail',] #如果一条消息要使用多个方式发送的话，可以使用此方式实现
 
 class Notification:
     def __init__(self):
         self.message = None
         self.__event = threading.Event()
         self.__cond = threading.Condition()
+        self.__mail_queue = Queue(100)
+
+    def _send_mail(e, q):
+        #从mail队列里面取消息进行发送（此方法是实际发送mail的线程）
+        while not self.__event.is_set():
+            message = self.__mail_queue.get()
+            #TODO
 
     def send_mail(self):
-        #等待notify方法来通知然后进行消息的发送
+        #等待notify方法来通知然后把消息put进mail的队列里面
+        threading.Thread(target=self._send_mail, name='send-mail-real').start()
         while not self.__event.is_set():
             with self.__cond:
                 self.__cond.wait()
-                #TODO
+                if 'mail' in self.message.type:
+                    try:
+                        self.__mail_queue.put(self.message, timeout=1)
+                    except Full:
+                        logging.error('mail queue is full')
+
 
     def send_sms(self):
         while not self.__event.is_set():
@@ -37,7 +54,7 @@ class Notification:
             self.__cond.notify_all()
 
     def start(self):
-        mail = threading.Thread(target=send_mail, name='send_mail')
+        mail = threading.Thread(target=self.send_mail, args=(self.__event) name='send_mail')
         mail.start()
         sms = threading.Thread(target=send_sms, name='send_sms')
         sms.start()
