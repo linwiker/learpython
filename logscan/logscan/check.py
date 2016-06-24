@@ -34,7 +34,7 @@ class Notification:
         while not self.__event.is_set():
             with self.__cond:
                 self.__cond.wait()
-                if 'mail' in self.message.type:
+                if 'mail' in self.message.type:  #判断mail是否在type的列表内，是则把消息put进mail队列等待发送
                     try:
                         self.__mail_queue.put(self.message, timeout=1)
                     except Full:
