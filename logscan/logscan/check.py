@@ -3,9 +3,6 @@
 import time
 import threading
 
-def send_mail(user, message):
-    pass
-
 class Message:
     def __init__(self, user, name, path, count):
         self.user = user
