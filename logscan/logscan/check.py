@@ -22,7 +22,8 @@ class Checker:
     def check(self):
         #判断是否到达阈值，触发规则则调用报警
         while not self.__event.is_set():
-            self.__event.wait(self.interval * 60)
+            self.__event.wait(self.interval * 60) #使用wait代替time.sleep的原因是如果我们想退出的话，但是线程还处在sleep
+            # 范围内，那么这个进程是没法立刻退出的，wait没有这个问题，退出的话直接就可以退出了，不需要再次等待
             count = self.counter.get(self.name)
             self.counter.clean(self.name)
             if count >= self.threshold[0]:
