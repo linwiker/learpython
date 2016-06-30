@@ -1,8 +1,10 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from queue import Queue
+from queue import Queue,Full
+import logging
 import re
+import threading
 
 class Token:
     LEFT_BRACKETS = "LEFT_BRACKETS"
@@ -135,6 +137,71 @@ class Matcher:
 
     def match(self, line):
         return cacl(self.ast, line)
+
+class MatcherChain:
+    def __init__(self,queue, counter):
+        self.checkers = {}
+        self.matchers = {}
+        self.queue = queue
+        self.queues = {}
+        self.events = {}
+        self.counter = counter
+        self.line = None
+        self.__cond = threading.Condition()
+        self.__event = threading.Event()
+
+    def _match(self, checker, event):
+        while not event.is_set():
+            line = self.queues[checker.name]
+            if self.matchers[checker.name].match(line):
+                self.counter.inc(checker.name)
+
+
+    def match(self, checker, event):
+        queue = Queue()
+        self.queues[checker.name] = queue
+        threading.Thread(target=self._match, args=(checker, event)).start()
+        while not event.is_set():
+            with self.__cond:
+                self.__cond.wait()
+                try:
+                    queue.put_nowait(self.line)
+                except Full:
+                    logging.error("queue is full")
+
+            line = self.queue.get()
+            if self.matchers.get(checker.name).match(line):
+                self.counter.inc(checker.name)
+
+
+    def add_checker(self, checker):
+        matcher = Matcher(checker.name, checker.expr)
+        self.checkers[checker.name] = checker
+        self.matchers[checker.name] = matcher
+        checker.start()
+        event = threading.Event()
+        self.events[checker.name] = event
+        threading.Thread(target=self.match, args=(checker,)).start()
+
+    def remove(self, name):
+        if name in self.events.keys():
+            self.events[name].set()
+            self.matchers[name].stop()
+            self.events.pop(name)
+            self.checkers.pop(name)
+
+    def stop(self):
+        for e in self.events.values():
+            e.set()
+        for c in self.checkers.values():
+            c.set()
+
+    def start(self):
+        self.__event.set()
+        while not self.__event.is_set():
+            line = self.queue.get()
+            self.__cond.notify_all()
+
 
 if __name__ == '__main__':
     e = '#test# & #abc# | (!#123# | #456#)'
