@@ -54,9 +54,9 @@ class Notification:
             self.__cond.notify_all()
 
     def start(self):
-        mail = threading.Thread(target=self.send_mail, args=(self.__event) name='send_mail')
+        mail = threading.Thread(target=self.send_mail, name='send_mail')
         mail.start()
-        sms = threading.Thread(target=send_sms, name='send_sms')
+        sms = threading.Thread(target=self.send_sms, name='send_sms')
         sms.start()
 
 
@@ -76,7 +76,7 @@ class Checker:
         self.__event = threading.Event()
         self.notification = notification
 
-    def start(self):
+    def _start(self):
         #判断是否到达阈值，触发规则则调用报警
         while not self.__event.is_set():
             self.__event.wait(self.interval * 60) #使用wait代替time.sleep的原因是如果我们想退出的话，但是线程还处在sleep
@@ -86,6 +86,10 @@ class Checker:
             if count >= self.threshold[0]:
                 if count < self.threshold[1] or self.threshold < 0:
                     self.notify('{0} matched {1} times in {2}min'.format(self.name, count, self.interval))
+
+    def start(self):
+        threading.Thread(target=self._start, name="checker-{0}".format(self.name)).start()
+
 
     def notify(self, count):
         for user in self.users:
