@@ -1,5 +1,6 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
+#每个checker一个线程，所有的matcher只有一个线程来完成
 import threading
 from queue import Empty
 from .match import Matcher
