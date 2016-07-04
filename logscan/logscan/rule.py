@@ -34,6 +34,7 @@ class Rule:
         self.order = order
         self.contacts = contacts
 
+        #zookeeper里面存取的格式是/logscan/$appid/$filename/$rulename,此$filename对象下面方法中的filename，$rulename对应name参数
         @classmethod
         def loads(cls, filename, name, src):
             filename = urlsafe_b64decode(filename)
