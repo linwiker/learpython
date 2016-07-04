@@ -129,14 +129,18 @@ def cacl(ast, line):
 
 class Matcher:
 
-    def __init__(self, name, origin):
+    def __init__(self, name, origin, order):
         #命中了哪一个match对象（name作用）
         self.name = name
+        self.order = order
         self.origin = origin
         self.ast = make_ast(tokenize(origin))
 
     def match(self, line):
         return cacl(self.ast, line)
+
+    def __eq__(self, other):
+        return self.name == other.name
 
 class MatcherChain:
     def __init__(self,queue, counter):
