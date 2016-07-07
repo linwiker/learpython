@@ -3,7 +3,6 @@
 import sqlite3
 import threading
 import logging
-import datetime
 from queue import Queue, Full, Empty
 from .rule import Contact
 
