@@ -37,8 +37,8 @@ class Rule:
         #zookeeper里面存取的格式是/logscan/$appid/$filename/$rulename,此$filename对象下面方法中的filename，$rulename对应name参数
         @classmethod
         def loads(cls, filename, name, src):
-            filename = urlsafe_b64decode(filename)
-            name = urlsafe_b64decode(name)
+            filename = urlsafe_b64decode(filename).decode()
+            name = urlsafe_b64decode(name).decode()
             content = json.loads(src)
             contacts = [Contact(**contact) for contact in content.get('contacts', [])]
             threshold = Threshold(**content['threshold'])

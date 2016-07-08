@@ -19,11 +19,11 @@ class Schedule:
         self.offset_db = OffsetPersistence(config)
 
     def __make_key(self, filename):
-        return path.abspath(urlsafe_b64decode(filename))
+        return path.abspath(urlsafe_b64decode(filename).decode())
 
     def add_watcher(self, filename):
         #如果监控的文件都在同一个目录下，下面这种方法只会启动一个inotify来进行监控这个目录下的所有文件，handler.start实际上调用了monitor的start
-        handler = Watcher(urlsafe_b64decode(filename), counter=self.counter, notifier=self.notifier, offset_db=self.offset_db)
+        handler = Watcher(urlsafe_b64decode(filename).decode(), counter=self.counter, notifier=self.notifier, offset_db=self.offset_db)
         if handler.filename not in self.handlers.keys():
             self.handlers[handler.filename] = handler
             self.watchers[handler.filename] = self.observer.schedule(handler, path.dirname(handler.filename), recursive=False)
