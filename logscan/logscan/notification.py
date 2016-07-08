@@ -54,12 +54,11 @@ class Notifier:
         self.db = sqlite3.connect(config['notification']['persistence'])
         self.db.row_factory = sqlite3.Row
         self.cursor = self.db.cursor()
-        # try:
-        if not os.path.isfile(os.path.abspath(self.config['notification']['persistence'])):
+        try:
             self.cursor.execute(CREATE_TABLE_DDL)
             self.db.commit()
-        # except Exception as e:
-        #     logging.error('init notification error, {0}'.format(e))
+        except Exception as e:
+            logging.error('init notification error, {0}'.format(e))
 
     def notify(self, message):
         sql = r'INSERT INTO notifications (name, count, contact, receive_time) VALUES (?, ?, ?, ?)'
