@@ -1,0 +1,8 @@
+{
+  "expression": "xxxxxx",
+  "interval": 1,
+  "order": 0,
+  "contacts": [
+    {"mail": 'xxxxxxx', "mobile": "xxxxxxx"}
+  ]
+}
