@@ -3,7 +3,7 @@
 import threading
 from functools import partial
 from os import path
-from kazoo.client import KazooClient
+from kazoo.client import KazooClient, NoNodeError
 from kazoo.recipe.watchers import ChildrenWatch, DataWatch
 from .schedule import Schedule
 
@@ -27,7 +27,10 @@ class Scan:
             self.schedule.add_watcher(f)
             self.file_watchers_ctl[f] = threading.Event()
             fn = partial(self.watch_rules, filename=f, event=self.file_watchers_ctl[f])
-            ChildrenWatch(self.zk, path.join(self.root, f), fn)
+            try:
+                ChildrenWatch(self.zk, path.join(self.root, f), fn)
+            except NoNodeError:
+                pass
         for f in self.files.difference(set(files)):
             self.schedule.remove_watcher(f)
             event = self.file_watchers_ctl.pop(f)
@@ -43,7 +46,10 @@ class Scan:
             self.schedule.add_monitor(filename, rule, self.zk.get(node))
             self.rule_watchers_ctl[rule] = threading.Event
             fn = partial(self.watch_rules, filename=filename, name=rule, event=self.rule_watchers_ctl[rule])
-            DataWatch(self.zk, node, fn)
+            try:
+                DataWatch(self.zk, node, fn)
+            except NoNodeError:
+                pass
         for rule in self.rules[filename].difference(set(rules)):
             self.schedule.remove_monitor(filename, rule)
             self.rule_watchers_ctl.pop(rule).set()

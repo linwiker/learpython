@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 import threading
+import os
 import logging
 from queue import Queue, Full, Empty
 from .rule import Contact
@@ -53,11 +54,12 @@ class Notifier:
         self.db = sqlite3.connect(config['notification']['persistence'])
         self.db.row_factory = sqlite3.Row
         self.cursor = self.db.cursor()
-        try:
+        # try:
+        if not os.path.isfile(self.config['notification']['persistence']):
             self.cursor.execute(CREATE_TABLE_DDL)
             self.db.commit()
-        except Exception as e:
-            logging.error('init notification error, {0}'.format(e))
+        # except Exception as e:
+        #     logging.error('init notification error, {0}'.format(e))
 
     def notify(self, message):
         sql = r'INSERT INTO notifications (name, count, contact, receive_time) VALUES (?, ?, ?, ?)'
