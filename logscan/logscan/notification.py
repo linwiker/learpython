@@ -94,6 +94,7 @@ class Notifier:
             except Empty:
                 logging.warning('notification queue empty')
 
+    #补偿机制
     def __compensate(self):
         self.cursor.execute(r'SELECT rowid FROM notifications WHERE is_send=?', (False, ))
         for row in self.cursor.fetchall():
