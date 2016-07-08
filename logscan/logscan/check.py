@@ -1,6 +1,5 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
-import time
 import logging
 import threading
 from queue import Queue, Full
