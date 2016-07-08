@@ -1,49 +1,60 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import sys
-import threading
+import logging
+from datetime import datetime
+from queue import Queue,Full
 from watchdog.events import FileSystemEventHandler
-from watchdog.observers import Observer
-from .match import Matcher
+from .monitor import Monitor
 
 class Watcher(FileSystemEventHandler):
-
-    def __init__(self, filename, checker):
+    def __init__(self, filename, counter, notifier, offset_db, queue_len=1000):
         self.filename = os.path.abspath(filename)
-        self.matcher = Matcher(checker.name, checker.expr)
-        self.checker = checker
-        self.counter = None
-        self.observer = Observer()
+        self.queue =  Queue(queue_len)
+        self.counter = counter
+        self.monitor = Monitor(self.queue, counter, notifier)
+        self.offset_db = offset_db
+        self.timer = datetime.now()
         self.fd = None
         self.offset = 0
-
+        #从持久化存储中读取此文件上次读取的位置和当前获取的位置进行对比，然后进行操作
         if os.path.isfile(self.filename):
             self.fd = open(self.filename)
-            self.offset = os.path.getsize(self.filename)
+            offset = self.offset_db.get(self.filename)
+            file_size = os.path.getsize(self.filename)
+            if offset < 0:
+                self.offset = file_size
+            else:
+                if offset <= file_size:
+                    self.offset = offset
+                else:
+                    self.offset = 0
 
     def start(self):
-        t = threading.Thread(target=self.checker, name='check-{0}'.format(self.checker.name))
-        t.start()
-        self.observer.schedule(self, os.path.dirname(self.filename), recursive=False)
-        self.observer.start()
-        self.observer.join()
+        self.monitor.start()
 
     def stop(self):
-        self.checker.stop()
-        self.observer.stop()
         if self.fd is not None and not self.fd.closed:
             self.fd.close()
+        self.monitor.stop()
+        #持久化文件读到什么位置
+        self.offset_db.put(self.filename, self.offset)
+        self.offset_db.sync()
 
     def on_modified(self, event):
+        now = datetime.now()
         if os.path.abspath(event.src_path) == self.filename:
             self.fd.seek(self.offset, 0)
             for line in self.fd:
                 line = line.rstrip('\n')
-                if self.matcher.match(line):
-                    if self.counter is not None:
-                        self.counter.inc(self.matcher.name)
+                try:
+                    self.queue.put_nowait(line)
+                except Full:
+                    logging.warning("queue overflow")
             self.offset = self.fd.tell()
+        if (now - self.timer).seconds > 30:
+            self.offset_db.put(self.filename, self.offset)
+            self.timer = now
 
     def on_deleted(self, event):
         if os.path.abspath(event.src_path) == self.filename:
@@ -60,20 +71,5 @@ class Watcher(FileSystemEventHandler):
         elif os.path.abspath(event.dest_path) == self.filename and os.path.isfile(self.filename): #移动过来的
             self.fd = open(self.filename)
             self.offset = os.path.getsize(self.filename)
-
-if __name__ == '__main__':
-    class Matcher:
-        def match(self, line):
-            return True
-    w = Watcher(sys.argv[1], Matcher())
-    w2 = Watcher(sys.argv[2], Matcher())
-    try:
-        t1 = threading.Thread(target=w.start)
-        t1.start()
-        t2  = threading.Thread(target=w2.start)
-        t2.start()
-    except KeyboardInterrupt:
-        t1._stop()
-        t2._stop()
 
 
