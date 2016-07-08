@@ -1,6 +1,5 @@
 #/usr/bin/env python
 # -*- coding: utf-8 -*-
-import logging
 import threading
 from functools import partial
 from os import path
