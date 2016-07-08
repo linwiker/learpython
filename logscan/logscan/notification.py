@@ -55,7 +55,7 @@ class Notifier:
         self.db.row_factory = sqlite3.Row
         self.cursor = self.db.cursor()
         # try:
-        if not os.path.isfile(self.config['notification']['persistence']):
+        if not os.path.isfile(os.path.abspath(self.config['notification']['persistence'])):
             self.cursor.execute(CREATE_TABLE_DDL)
             self.db.commit()
         # except Exception as e:
