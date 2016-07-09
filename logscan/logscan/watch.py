@@ -72,4 +72,12 @@ class Watcher(FileSystemEventHandler):
             self.fd = open(self.filename)
             self.offset = os.path.getsize(self.filename)
 
+    def __eq__(self, other):
+        return self.filename == other.filename
+
+    def __ne__(self, other):
+        return self.filename != other.filename
+
+    def __hash__(self):
+        return hash(self.filename)
 
