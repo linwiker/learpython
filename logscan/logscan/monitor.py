@@ -53,7 +53,7 @@ class Monitor:
     def __do_match(self):
         while not self.__event.is_set():
             try:
-                line = self.queue.get(timeout=100)
+                line = self.queue.get(timeout=0.1)
                 for matcher in self.matcher_list:
                     if matcher.match(line):
                         self.counter.inc(matcher.name)
