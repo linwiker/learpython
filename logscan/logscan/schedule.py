@@ -23,19 +23,30 @@ class Schedule:
 
     def add_watcher(self, filename):
         #如果监控的文件都在同一个目录下，下面这种方法只会启动一个inotify来进行监控这个目录下的所有文件，handler.start实际上调用了monitor的start
-        handler = Watcher(urlsafe_b64decode(filename).decode(), counter=self.counter, notifier=self.notifier, offset_db=self.offset_db)
+        filename = self.__make_key(filename)
         if handler.filename not in self.handlers.keys():
+            handler = Watcher(filename, counter=self.counter, notifier=self.notifier, offset_db=self.offset_db)
+            if path.dirname(handler.filename) not in self.watchers.keys():
+                self.watchers[path.dirname(handler.filename)] = self.observer.schedule(handler, path.dirname(handler.filename), recursive=False)
+            else:
+                watch = self.watchers[path.dirname(handler.filename)]
+                self.observer.add_handler_for_watch(handler, watch)
             self.handlers[handler.filename] = handler
-            self.watchers[handler.filename] = self.observer.schedule(handler, path.dirname(handler.filename), recursive=False)
             handler.start()
+
 
     def remove_watcher(self, filename):
         #判断key是否在watchers里面，有则从observer中剔除，然后从watchers字典内删除，并把handlers剔除并stop
         key = self.__make_key(filename)
-        if key in self.watchers.keys():
-            self.observer.unschedule(self.watchers.get(key))
-            self.watchers.pop(key)
-            self.handlers.pop(key).stop()
+        handler = self.handlers.pop(key)
+        if handler is not None:
+            watch = self.watchers[path.dirname(key)]
+            self.observer.remove_handler_for_watch(handler, watch)
+            handler.stop()
+            if not self.observer._handlers[watch]:
+                self.observer.unschedule(watch)
+                self.watchers.pop(path.dirname(handler.filename))
+
 
     #添加和移除monitor，实质上就是调用Monitor类的add和remove方法来操作
     def add_monitor(self, filename, name, src):
