@@ -23,6 +23,7 @@ class Scan:
         self.__event = threading.Event()
 
     def watch_files(self, files):
+        #差集得出需要进行监控的文件
         for f in set(files).difference(self.files):
             self.schedule.add_watcher(f)
             self.file_watchers_ctl[f] = threading.Event()
@@ -31,6 +32,7 @@ class Scan:
                 ChildrenWatch(self.zk, path.join(self.root, f), fn)
             except NoNodeError:
                 pass
+        #差价得出不需要监控的文件
         for f in self.files.difference(set(files)):
             self.schedule.remove_watcher(f)
             event = self.file_watchers_ctl.pop(f)
