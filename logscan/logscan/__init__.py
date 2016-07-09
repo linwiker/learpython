@@ -28,10 +28,7 @@ class Scan:
             self.schedule.add_watcher(f)
             self.file_watchers_ctl[f] = threading.Event()
             fn = partial(self.watch_rules, filename=f, event=self.file_watchers_ctl[f])
-            try:
-                ChildrenWatch(self.zk, path.join(self.root, f), fn)
-            except NoNodeError:
-                pass
+            ChildrenWatch(self.zk, path.join(self.root, f), fn)
         #差价得出不需要监控的文件
         for f in self.files.difference(set(files)):
             self.schedule.remove_watcher(f)
@@ -41,6 +38,8 @@ class Scan:
         return not self.__event.is_set()
 
     def watch_rules(self, rules, filename, event):
+        if event.is_set():
+            return False
         if filename not in self.rules:
             self.rules[filename] = set()
         for rule in set(rules).difference(self.rules[filename]):
