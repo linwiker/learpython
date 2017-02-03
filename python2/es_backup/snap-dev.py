@@ -11,7 +11,7 @@ def getAllIndex():
     li.remove(".kibana")
     return li
 
-def esbackup(servicename, reposname):
+def esdelete(servicename):
     t = date.today() - timedelta(days=30)
     A = getAllIndex()
     v = []
@@ -20,7 +20,7 @@ def esbackup(servicename, reposname):
     for i in A:
         if i.startswith(servicename):
             v.append(i)
-    for j in range(14):
+    for j in range(30):
         if index in v:
             v.remove(index)
         t = t + timedelta(days=1)
@@ -41,4 +41,4 @@ if __name__ == '__main__':
     # for i in backup:
     # for i in app_list:
     #     esbackup("{0}".format(i),"app")
-    esbackup("log","app")
+    esdelete("log")
